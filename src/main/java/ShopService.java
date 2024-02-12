@@ -16,8 +16,8 @@ public class ShopService {
             }
             products.add(productToOrder);
         }
-
-        Order newOrder = new Order(UUID.randomUUID().toString(), products);
+        //anpassen der Methode mit dem Bestellstatus
+        Order newOrder = new Order(UUID.randomUUID().toString(), products, OrderStatus.PROCESSING);
 
         return orderRepo.addOrder(newOrder);
     }
