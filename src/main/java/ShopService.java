@@ -1,3 +1,4 @@
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +22,7 @@ public class ShopService {
             products.add(productToOrder.get());
         }
         //anpassen der Methode mit dem Bestellstatus
-        Order newOrder = new Order(UUID.randomUUID().toString(), products, OrderStatus.PROCESSING);
+        Order newOrder = new Order(UUID.randomUUID().toString(), products, OrderStatus.PROCESSING, ZonedDateTime.now());
 
         return orderRepo.addOrder(newOrder);
     }
@@ -31,7 +32,14 @@ public class ShopService {
         return orders.stream()
                 .filter(order -> order.status().equals(status))
                 .collect(Collectors.toList());
+    }
 
+    public static Order updateOrder (Order order, String id, OrderStatus status) {
+        if (order.id().equals(id)) {
+            return new Order(order.id(), order.products(), status, order.orderDate());
+        } else {
+            return order;
+        }
     }
 
 }
