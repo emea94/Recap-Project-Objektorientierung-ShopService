@@ -21,7 +21,7 @@ public class ShopService {
             }
             products.add(productToOrder.get());
         }
-        //anpassen der Methode mit dem Bestellstatus
+        //anpassen der Methode mit dem Bestellstatus und einem Zeitstempel
         Order newOrder = new Order(UUID.randomUUID().toString(), products, OrderStatus.PROCESSING, ZonedDateTime.now());
 
         return orderRepo.addOrder(newOrder);
@@ -34,9 +34,10 @@ public class ShopService {
                 .collect(Collectors.toList());
     }
 
+    //Hinzufügen einer Methode, die die IDs abgleicht und bei gleicher ID den Status mithilfe der Lombok Annotation aktualisiert
     public static Order updateOrder (Order order, String id, OrderStatus status) {
         if (order.id().equals(id)) {
-            return new Order(order.id(), order.products(), status, order.orderDate());
+            return order.withStatus(status);
         } else {
             return order;
         }
