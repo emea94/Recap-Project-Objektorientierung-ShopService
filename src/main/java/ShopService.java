@@ -1,3 +1,8 @@
+import Order.Order;
+import Product.Product;
+import Product.ProductRepo;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -5,18 +10,19 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+
 public class ShopService {
     private ProductRepo productRepo = new ProductRepo();
     private OrderRepo orderRepo = new OrderMapRepo();
 
-    public Order addOrder(List<String> productIds)  //Bei Checked-Exception: throws ProductNotFoundException
+    public Order addOrder(List<String> productIds)  //Bei Checked-Exception: throws Product.ProductNotFoundException
     {
         List<Product> products = new ArrayList<>();
         for (String productId : productIds) {
             Optional<Product> productToOrder = productRepo.getProductById(productId);
             if (productToOrder.isEmpty()) {
-                throw new ProductNotFoundException("Product mit der Id: " + productId + " konnte nicht bestellt werden!");
-                // anstatt: System.out.println("Product mit der Id: " + productId + " konnte nicht bestellt werden!");
+                throw new ProductNotFoundException("Product.Product mit der Id: " + productId + " konnte nicht bestellt werden!");
+                // anstatt: System.out.println("Product.Product mit der Id: " + productId + " konnte nicht bestellt werden!");
                 //                return null;
             }
             products.add(productToOrder.get());
