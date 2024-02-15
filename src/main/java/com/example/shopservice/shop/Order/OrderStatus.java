@@ -1,4 +1,4 @@
-package shop.Order;
+package com.example.shopservice.shop.Order;
 
 public enum OrderStatus {
     PROCESSING,

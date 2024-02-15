@@ -1,29 +1,26 @@
-package shop;
+package com.example.shopservice.shop;
 
+import com.example.shopservice.shop.Order.OrderStatus;
+import com.example.shopservice.shop.Product.Product;
+import com.example.shopservice.shop.Product.ProductNotFoundException;
+import com.example.shopservice.shop.Product.ProductRepo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import shop.Order.Order;
-import shop.Order.OrderRepo;
-import shop.Order.OrderStatus;
-import shop.Product.Product;
-import shop.Product.ProductNotFoundException;
-import shop.Product.ProductRepo;
+import com.example.shopservice.shop.Order.Order;
+import com.example.shopservice.shop.Order.OrderRepo;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/shop")
+@RequiredArgsConstructor
 public class ShopController {
     private ProductRepo productRepo = new ProductRepo();
-    private OrderRepo orderRepo;
-
-    public ShopController(OrderRepo orderRepo) {
-        this.orderRepo;
-    }
+    private final OrderRepo orderRepo;
 
     @PostMapping("/orders")
     public Order addOrder(@RequestBody List<String> productIds)
@@ -47,14 +44,14 @@ public class ShopController {
     //Hinzufügen einer Methode, die die Bestellungen über streams nach ihrem Status filtert
     @GetMapping("/orders")
     public List<Order> findAll(@RequestParam OrderStatus status) {
-        return orderRepo.findAllByy(status);
+        return orderRepo.findAllBy(status);
     }
 
     //Hinzufügen einer Methode, die die IDs abgleicht und bei gleicher ID den Status mithilfe der Lombok Annotation aktualisiert
     @PutMapping("/orders/{id}")
     public void updateOrder (@PathVariable String id, @RequestParam OrderStatus newStatus) {
         Order oldOrder = orderRepo.getOrderById(id);
-        orderRepo.removeOrder(id);
+        orderRepo.removeOrderById(id);
         Order newOrder = oldOrder.withStatus(newStatus);
         orderRepo.save(newOrder);
     }

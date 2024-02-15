@@ -1,4 +1,4 @@
-package shop.Product;
+package com.example.shopservice.shop.Product;
 
 import java.util.ArrayList;
 import java.util.List;
