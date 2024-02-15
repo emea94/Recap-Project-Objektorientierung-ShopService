@@ -1,4 +1,4 @@
-package Order;
+package shop.Order;
 
 import lombok.With;
 

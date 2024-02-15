@@ -1,4 +1,4 @@
-package Order;
+package shop.Order;
 
 import java.util.List;
 

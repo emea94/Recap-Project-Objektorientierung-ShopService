@@ -1,7 +1,12 @@
-import Order.Order;
-import Product.Product;
-import Product.ProductRepo;
-import org.springframework.web.bind.annotation.RestController;
+package shop;
+
+import org.springframework.web.bind.annotation.*;
+import shop.Order.Order;
+import shop.Order.OrderRepo;
+import shop.Order.OrderStatus;
+import shop.Product.Product;
+import shop.Product.ProductNotFoundException;
+import shop.Product.ProductRepo;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -10,12 +15,18 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-
-public class ShopService {
+@RestController
+@RequestMapping("/api/shop")
+public class ShopController {
     private ProductRepo productRepo = new ProductRepo();
-    private OrderRepo orderRepo = new OrderMapRepo();
+    private OrderRepo orderRepo;
 
-    public Order addOrder(List<String> productIds)  //Bei Checked-Exception: throws Product.ProductNotFoundException
+    public ShopController(OrderRepo orderRepo) {
+        this.orderRepo;
+    }
+
+    @PostMapping("/orders")
+    public Order addOrder(@RequestBody List<String> productIds)
     {
         List<Product> products = new ArrayList<>();
         for (String productId : productIds) {
@@ -30,23 +41,22 @@ public class ShopService {
         //anpassen der Methode mit dem Bestellstatus und einem Zeitstempel
         Order newOrder = new Order(UUID.randomUUID().toString(), products, OrderStatus.PROCESSING, ZonedDateTime.now());
 
-        return orderRepo.addOrder(newOrder);
+        return orderRepo.save(newOrder);
     }
 
     //Hinzufügen einer Methode, die die Bestellungen über streams nach ihrem Status filtert
-    public List<Order> filterOrderByStatus(List<Order> orders, OrderStatus status) {
-        return orders.stream()
-                .filter(order -> order.status().equals(status))
-                .collect(Collectors.toList());
+    @GetMapping("/orders")
+    public List<Order> findAll(@RequestParam OrderStatus status) {
+        return orderRepo.findAllByy(status);
     }
 
     //Hinzufügen einer Methode, die die IDs abgleicht und bei gleicher ID den Status mithilfe der Lombok Annotation aktualisiert
-    public static Order updateOrder (Order order, String id, OrderStatus status) {
-        if (order.id().equals(id)) {
-            return order.withStatus(status);
-        } else {
-            return order;
-        }
+    @PutMapping("/orders/{id}")
+    public void updateOrder (@PathVariable String id, @RequestParam OrderStatus newStatus) {
+        Order oldOrder = orderRepo.getOrderById(id);
+        orderRepo.removeOrder(id);
+        Order newOrder = oldOrder.withStatus(newStatus);
+        orderRepo.save(newOrder);
     }
 
 }

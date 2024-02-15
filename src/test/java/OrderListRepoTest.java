@@ -1,5 +1,5 @@
-import Order.Order;
-import Product.Product;
+import shop.Order.Order;
+import shop.Product.Product;
 import org.junit.jupiter.api.Test;
 
 import java.time.ZoneId;

@@ -1,7 +1,8 @@
-import Order.Order;
-import Product.Product;
+import shop.Order.Order;
+import shop.Product.Product;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import shop.ShopController;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -15,7 +16,7 @@ class ShopServiceTest {
     @Test
     void addOrderTest() {
         //GIVEN
-        ShopService shopService = new ShopService();
+        ShopController shopService = new ShopController();
         List<String> productsIds = List.of("1");
         ZonedDateTime fixedTime = ZonedDateTime.of(2021, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault());
 
@@ -31,7 +32,7 @@ class ShopServiceTest {
     @Test
     void addOrderTest_whenInvalidProductId_expectException() {
         //GIVEN
-        ShopService shopService = new ShopService();
+        ShopController shopService = new ShopController();
         List<String> productsIds = List.of("1", "2");
 
         //THEN -> WHEN
@@ -49,7 +50,7 @@ class ShopServiceTest {
         statusOrders.add(new Order("3", List.of(new Product("3", "Banane")), OrderStatus.COMPLETED, fixedTime));
         statusOrders.add(new Order("4", List.of(new Product("4", "Kiwi")), OrderStatus.PROCESSING, fixedTime));
 
-        ShopService shopService = new ShopService();
+        ShopController shopService = new ShopController();
 
         //WHEN
         List<Order> actual = shopService.filterOrderByStatus(statusOrders, OrderStatus.PROCESSING);
@@ -69,7 +70,7 @@ class ShopServiceTest {
         String id = "1";
         OrderStatus newStatus = OrderStatus.IN_DELIVERY;
         //WHEN
-        Order updatedOrder = ShopService.updateOrder(initialOrder, id, newStatus);
+        Order updatedOrder = ShopController.updateOrder(initialOrder, id, newStatus);
         //THEN
         assertEquals(id, updatedOrder.id());
         assertEquals(newStatus, updatedOrder.status());

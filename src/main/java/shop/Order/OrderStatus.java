@@ -1,4 +1,4 @@
-package Order;
+package shop.Order;
 
 public enum OrderStatus {
     PROCESSING,

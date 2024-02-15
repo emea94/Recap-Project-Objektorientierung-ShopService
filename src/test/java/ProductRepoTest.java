@@ -1,4 +1,4 @@
-import Product.Product;
+import shop.Product.Product;
 
 import java.util.*;
 

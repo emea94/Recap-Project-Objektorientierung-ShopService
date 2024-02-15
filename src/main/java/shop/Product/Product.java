@@ -1,4 +1,4 @@
-package Product;
+package shop.Product;
 
 public record Product(
         String id,
